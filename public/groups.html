@@ -13,40 +13,49 @@
     <div id="container" background-color='black'></div>
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
     <script defer="defer">
+
       var stage = new Kinetic.Stage({
         container: 'container',
-        width: 1000,
-        height: 600,
+        width: window.innerWidth,
+        height: window.innerHeight,
       });
 
       var shapesLayer = new Kinetic.Layer();
 
-      for(var n = 10; n < stage.width(); n += stage.width()/50) {
-        for (var m = 10; m < stage.height(); m += stage.height()/25){
+      for(var n = 10; n < stage.width(); n += stage.width()/40) {
+        for (var m = 10; m < stage.height(); m += stage.height()/20){
           var i = n;
           var j = m;
           var circle = new Kinetic.Circle({
             x: i,
             y: j,
-            radius: stage.width()/150,
+            radius: stage.width()/100,
             fill: 'gray',
           });
 
+          var exploderRepeater;
+
           circle.on('mousedown', function(event) {
             var shape = event.target;
-            shape.attrs.fill = 'white';
-            shapesLayer.draw();
+            grow = function(obj) {
+              obj.attrs.radius += 5;
+              shapesLayer.draw();
+            };
+            explodeRepeater = setInterval(function() {grow(shape)}, 100);
           });
 
           var repeater;
 
           circle.on('mouseover', function(event) {
             var shape = event.target;
-            grow = function(obj) {
-              obj.attrs.radius += 2;
+
+            if (shape.attrs.radius <= stage.width()/40){
+              grow = function(obj) {
+                obj.attrs.radius += 2;
+                shapesLayer.draw();
             };
             repeater = setInterval(function() {grow(shape)}, 100);
-            shapesLayer.draw();
+          }
           });
 
           circle.on('mouseout', function(event) {
@@ -57,18 +66,6 @@
           shapesLayer.add(circle);
       }
     }
-
-      //
-
-
-
-
-
-      // circle.on('mouseup', function() {
-      //   // var shape = event.target;
-      //   // console.log(shape);
-      //   // stage.add(shapesLayer);
-      // });
 
       stage.add(shapesLayer);
     </script>
