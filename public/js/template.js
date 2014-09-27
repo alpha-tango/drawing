@@ -14,33 +14,37 @@ function drawCircle(x, y, radius, color) {
   ctx.fill();
 }
 
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
-ctx.canvas.width = window.innerWidth * 0.95;
-ctx.canvas.height = window.innerHeight * 0.95;
+ctx.canvas.width = window.innerWidth
+ctx.canvas.height = window.innerHeight
 
 var SCREEN_WIDTH = ctx.canvas.width;
 var SCREEN_HEIGHT = ctx.canvas.height;
 
-var ball = {
-  x: SCREEN_WIDTH / 2,
-  y: SCREEN_HEIGHT / 2,
-  radius: SCREEN_HEIGHT / 50,
-  xVel: SCREEN_WIDTH / 100,
-  isStopped: false
-};
+//draw group of circles
+var group = new Array();
+
+for (i = 20; i < SCREEN_WIDTH; i+= (SCREEN_WIDTH/30)) {
+  for (j = 20; j < SCREEN_HEIGHT; j += (SCREEN_HEIGHT/15)) {
+    var ball = {
+      x: i,
+      y: j,
+      radius: SCREEN_WIDTH/100,
+      xVel: SCREEN_WIDTH/700,
+      isStopped:true
+    };
+    group.push(ball);
+  }
+}
 
 function draw() {
   ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-  // Draw elements of the game here.
-  // Can use `drawRect` and `drawCircle` function.
-  // e.g. draw the ball colored green
-  drawCircle(ball.x, ball.y, ball.radius, 'green');
+  //print circles to screen
+  group.forEach(function(c) {
+    drawCircle(c.x, c.y, c.radius, 'black');
+    });
 }
 
 function tick() {
