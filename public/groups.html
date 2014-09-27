@@ -5,12 +5,12 @@
       body {
         margin: 0px;
         padding: 0px;
-        background-color: lightgray;
+        background-color: 'silver';
       }
     </style>
   </head>
   <body>
-    <div id="container" background-color='black'></div>
+    <div id="container"></div>
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
     <script defer="defer">
 
@@ -20,54 +20,77 @@
         height: window.innerHeight,
       });
 
+      var ratio = window.innerWidth/window.innerHeight;
       var shapesLayer = new Kinetic.Layer();
 
       for(var n = 10; n < stage.width(); n += stage.width()/40) {
-        for (var m = 10; m < stage.height(); m += stage.height()/20){
+        for (var m = 10; m < stage.height(); m += stage.height()/(40/ratio)){
           var i = n;
           var j = m;
           var circle = new Kinetic.Circle({
             x: i,
             y: j,
-            radius: stage.width()/100,
-            fill: 'gray',
+            radius: stage.width()/120,
+            fill: 'darkgray'
           });
 
           var exploderRepeater;
 
           circle.on('mousedown', function(event) {
             var shape = event.target;
-            grow = function(obj) {
+            shape.moveToTop();
+            shape.attrs.fill= 'whitesmoke';
+            shapesLayer.draw();
+            explode = function(obj) {
               obj.attrs.radius += 5;
               shapesLayer.draw();
             };
-            explodeRepeater = setInterval(function() {grow(shape)}, 100);
+            explodeRepeater = setInterval(function() {explode(shape)}, 100);
           });
 
           var repeater;
 
           circle.on('mouseover', function(event) {
             var shape = event.target;
-
-            if (shape.attrs.radius <= stage.width()/40){
               grow = function(obj) {
-                obj.attrs.radius += 2;
+                if(obj.attrs.radius <= (stage.width()/30 - stage.width()/100)){
+                obj.attrs.radius += 1;
                 shapesLayer.draw();
+              } else {
+                shapesLayer.draw();
+              }
             };
-            repeater = setInterval(function() {grow(shape)}, 100);
-          }
+          repeater = setInterval(function() {grow(shape)}, 100);
           });
 
           circle.on('mouseout', function(event) {
             var shape = event.target;
             clearInterval(repeater);
+            tween.play();
+            tween.reverse();
           });
 
           shapesLayer.add(circle);
       }
     }
-
       stage.add(shapesLayer);
+
+      var tween = new Kinetic.Tween ({
+        node: circle,
+        scaleX: 1.2,
+        scaleY: 1.2,
+        duration: .5,
+        easing: Kinetic.Easings.ElasticEaseInOut()
+      });
+
+      var tweenTwo = new Kinetic.Tween ({
+        node: circle,
+        scaleX: 0.9,
+        scaleY: 0.9,
+        duration: .5,
+        easing: Kinetic.Easings.ElasticEaseInOut()
+      });
+
     </script>
   </body>
 </html>
