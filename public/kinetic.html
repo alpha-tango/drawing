@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
+    <script defer="defer">
+      function writeMessage(message) {
+        text.setText(message);
+        layer.draw();
+      }
+      var stage = new Kinetic.Stage({
+        container: 'container',
+        width: 1000,
+        height: 660
+      });
+      var shapesLayer = new Kinetic.Layer();
+
+      var text = new Kinetic.Text({
+        x: 10,
+        y: 10,
+        fontFamily: 'Calibri',
+        fontSize: 24,
+        text: '',
+        fill: 'black'
+      });
+
+      var group = new Kinetic.Group({
+        x: 0,
+        y: 0,
+        rotation: 20
+      })
+
+      for(i = 0; i < stage.height; i+= 80) {
+        (function(){
+      var circle = new Kinetic.Circle({
+        x: i,
+        y: stage.height()/2,
+        radius: 40,
+        fill: 'red',
+      });
+      group.add(circle);
+    })();
+    }
+
+      // circle.on('mouseover', function() {
+      //   writeMessage('Mouseover circle');
+      // });
+      // circle.on('mouseout', function() {
+      //   writeMessage('Mouseout circle');
+      // });
+      // circle.on('mousedown', function() {
+      //   writeMessage('Mousedown circle');
+      // });
+      // circle.on('mouseup', function() {
+      //   writeMessage('Mouseup circle');
+      // });
+
+      shapesLayer.add(group);
+      stage.add(shapesLayer);
+
+    </script>
+  </body>
+</html>

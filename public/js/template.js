@@ -23,19 +23,23 @@ ctx.canvas.height = window.innerHeight
 var SCREEN_WIDTH = ctx.canvas.width;
 var SCREEN_HEIGHT = ctx.canvas.height;
 
+function ball(x, y, radius) {
+  this.x = x;
+  this.y = y;
+  this.radius = radius;
+  this.xVel = SCREEN_WIDTH/700;
+  this.isStopped = true;
+  this.grow = function() {
+    this.radius *= 1.1;
+  };
+};
+
 //draw group of circles
 var group = new Array();
 
 for (i = 20; i < SCREEN_WIDTH; i+= (SCREEN_WIDTH/30)) {
   for (j = 20; j < SCREEN_HEIGHT; j += (SCREEN_HEIGHT/15)) {
-    var ball = {
-      x: i,
-      y: j,
-      radius: SCREEN_WIDTH/100,
-      xVel: SCREEN_WIDTH/700,
-      isStopped:true
-    };
-    group.push(ball);
+    group.push(new ball (i,j, SCREEN_WIDTH/100));
   }
 }
 
@@ -126,5 +130,9 @@ function run() {
     loop(time);
   });
 }
+
+ball.on('mouseover', function() {
+  alert("wee!");
+});
 
 run();

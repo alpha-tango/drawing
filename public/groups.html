@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
+    <script defer="defer">
+      var stage = new Kinetic.Stage({
+        container: 'container',
+        width: 1000,
+        height: 600
+      });
+      var shapesLayer = new Kinetic.Layer();
+
+      /*
+       * create a group which will be used to combine
+       * multiple simple shapes.  Transforming the group will
+       * transform all of the simple shapes together as
+       * one unit
+       */
+      var group = new Kinetic.Group({
+        x: 0,
+        y: 0,
+        rotation: 0
+      });
+
+      for(var n = 10; n < 1000; n += 80) {
+        // anonymous function to induce scope
+        (function() {
+          var i = n;
+          var circle = new Kinetic.Circle({
+            x: i,
+            y: stage.height()/2,
+            radius: 30,
+            fill: 'red',
+          });
+
+          group.add(circle);
+        })();
+      }
+
+      group.on('mouseover', function() {
+        console.log('fun');
+      });
+      group.on('mouseout', function() {
+        console.log('not fun');
+      });
+      group.on('mousedown', function() {
+        writeMessage('Mousedown circle');
+      });
+      group.on('mouseup', function() {
+        writeMessage('Mouseup circle');
+      });
+
+      shapesLayer.add(group);
+      stage.add(shapesLayer);
+    </script>
+  </body>
+</html>
