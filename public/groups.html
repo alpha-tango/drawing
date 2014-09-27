@@ -18,17 +18,11 @@
         width: 1000,
         height: 600,
       });
-      var shapesLayer = new Kinetic.Layer();
 
-      var group = new Kinetic.Group({
-        x: 0,
-        y: 0,
-        rotation: 0
-      });
+      var shapesLayer = new Kinetic.Layer();
 
       for(var n = 10; n < stage.width(); n += stage.width()/50) {
         for (var m = 10; m < stage.height(); m += stage.height()/25){
-        (function() {
           var i = n;
           var j = m;
           var circle = new Kinetic.Circle({
@@ -38,35 +32,38 @@
             fill: 'gray',
           });
 
-          group.add(circle);
-        })();
+          var repeater;
+
+          circle.on('mouseover', function() {
+            var shape = event.target;
+            grow = function(circle) {
+              circle.attrs.radius += 2;
+            };
+            repeater = setInterval(function() {grow(target)}, 100);
+            shapesLayer.add(circle);
+          });
+
+          shapesLayer.add(circle);
       }
     }
 
-      var repeater;
+      //
 
-      group.on('mouseover', function(event) {
-        var shape = event.target;
-        grow = function(circle){
-          circle.attrs.radius += 2;
-        };
-        repeater = setInterval(function() {grow(shape)}, 100);
-        stage.add(shapesLayer);
-      });
-      group.on('mouseout', function() {
-        repeater = clearInterval();
-      });
-      group.on('mousedown', function(event) {
-        var shape = event.target;
-        shape.attrs.fill = 'white';
-      });
-      group.on('mouseup', function() {
-        var shape = event.target;
-        console.log(shape);
-        stage.add(shapesLayer);
-      });
 
-      shapesLayer.add(group);
+
+      // circle.on('mouseout', function() {
+      //   repeater = clearInterval();
+      // });
+      // circle.on('mousedown', function(event) {
+      //   var shape = event.target;
+      //   // shape.attrs.fill = 'white';
+      // });
+      // circle.on('mouseup', function() {
+      //   // var shape = event.target;
+      //   // console.log(shape);
+      //   // stage.add(shapesLayer);
+      // });
+
       stage.add(shapesLayer);
     </script>
   </body>
