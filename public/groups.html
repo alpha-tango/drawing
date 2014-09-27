@@ -32,15 +32,26 @@
             fill: 'gray',
           });
 
+          circle.on('mousedown', function(event) {
+            var shape = event.target;
+            shape.attrs.fill = 'white';
+            shapesLayer.draw();
+          });
+
           var repeater;
 
-          circle.on('mouseover', function() {
+          circle.on('mouseover', function(event) {
             var shape = event.target;
-            grow = function(circle) {
-              circle.attrs.radius += 2;
+            grow = function(obj) {
+              obj.attrs.radius += 2;
             };
-            repeater = setInterval(function() {grow(target)}, 100);
-            shapesLayer.add(circle);
+            repeater = setInterval(function() {grow(shape)}, 100);
+            shapesLayer.draw();
+          });
+
+          circle.on('mouseout', function(event) {
+            var shape = event.target;
+            clearInterval(repeater);
           });
 
           shapesLayer.add(circle);
@@ -51,13 +62,8 @@
 
 
 
-      // circle.on('mouseout', function() {
-      //   repeater = clearInterval();
-      // });
-      // circle.on('mousedown', function(event) {
-      //   var shape = event.target;
-      //   // shape.attrs.fill = 'white';
-      // });
+
+
       // circle.on('mouseup', function() {
       //   // var shape = event.target;
       //   // console.log(shape);
