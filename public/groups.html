@@ -5,58 +5,65 @@
       body {
         margin: 0px;
         padding: 0px;
+        background-color: lightgray;
       }
     </style>
   </head>
   <body>
-    <div id="container"></div>
+    <div id="container" background-color='black'></div>
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
     <script defer="defer">
       var stage = new Kinetic.Stage({
         container: 'container',
         width: 1000,
-        height: 600
+        height: 600,
       });
       var shapesLayer = new Kinetic.Layer();
 
-      /*
-       * create a group which will be used to combine
-       * multiple simple shapes.  Transforming the group will
-       * transform all of the simple shapes together as
-       * one unit
-       */
       var group = new Kinetic.Group({
         x: 0,
         y: 0,
         rotation: 0
       });
 
-      for(var n = 10; n < 1000; n += 80) {
-        // anonymous function to induce scope
+      for(var n = 10; n < stage.width(); n += stage.width()/50) {
+        for (var m = 10; m < stage.height(); m += stage.height()/25){
         (function() {
           var i = n;
+          var j = m;
           var circle = new Kinetic.Circle({
             x: i,
-            y: stage.height()/2,
-            radius: 30,
-            fill: 'red',
+            y: j,
+            radius: stage.width()/150,
+            fill: 'gray',
           });
 
           group.add(circle);
         })();
       }
+    }
 
-      group.on('mouseover', function() {
-        console.log('fun');
+      var repeater;
+
+      group.on('mouseover', function(event) {
+        var shape = event.target;
+        grow = function(circle){
+          circle.attrs.radius += 2;
+        };
+        repeater = setInterval(function() {grow(shape)}, 100);
+        stage.add(shapesLayer);
       });
       group.on('mouseout', function() {
-        console.log('not fun');
+        repeater = clearInterval();
       });
-      group.on('mousedown', function() {
-        writeMessage('Mousedown circle');
+      group.on('mousedown', function(event) {
+        var shape = event.target;
+        shape.attrs.fill = 'white';
       });
       group.on('mouseup', function() {
-        writeMessage('Mouseup circle');
+        var shape = event.target;
+        console.log(shape);
+        stage.add(shapesLayer);
       });
 
       shapesLayer.add(group);
